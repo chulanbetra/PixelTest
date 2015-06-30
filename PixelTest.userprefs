@@ -1,9 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Level\LevelData.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Editor\TileEditor.cs">
     <Files>
-      <File FileName="Assets\Scripts\Level\LevelData.cs" Line="64" Column="15" />
-      <File FileName="Assets\Scripts\Camera\CameraController.cs" Line="47" Column="31" />
+      <File FileName="Assets\Editor\TileEditor.cs" Line="108" Column="47" />
+      <File FileName="Assets\Scripts\Core\MapSettings.cs" Line="28" Column="158" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
