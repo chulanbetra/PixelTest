@@ -12,6 +12,8 @@ public class TilesSettingsEditor : Editor
 	private List<Sprite> tiles;
 	private int selectedTile;
 	private GameObject tilesGameObject;
+	private bool leftMouseButtonDown = false;
+	private bool rightMouseButtonDown = false;
 
 	void OnEnable()
 	{
@@ -59,26 +61,44 @@ public class TilesSettingsEditor : Editor
 	{
 		int controlID = GUIUtility.GetControlID(FocusType.Passive);
 		Event e = Event.current;
+
+		// mouse down event
 		if (e.isMouse && e.type == EventType.MouseDown)
 		{
 			GUIUtility.hotControl = controlID;
 			e.Use();
 
+			// check mouse buttons pressed
+			if (e.button == 0)
+			{
+				leftMouseButtonDown = true;
+
+			}
+			else if (e.button == 1)
+			{
+				rightMouseButtonDown = true;
+
+			}
+		}
+
+		// mouse drag event
+		if (e.isMouse && e.type == EventType.MouseDrag)
+		{
 			Vector3 vPos = Camera.current.ScreenToWorldPoint(new Vector3(e.mousePosition.x, -e.mousePosition.y + Camera.current.pixelHeight, 0));
 			vPos = tilesSettings.GetAlignedVector3(vPos);
 			GameObject pSpriteObject = GetGameObjectFromPosition(vPos);
 
-			if (e.button == 0)
+			if (leftMouseButtonDown)
 			{
-				// left click
+				// dragging with left button pressed
 				if (pSpriteObject == null)
 				{
 					CreateTile(vPos);
 				}
 			}
-			else if (e.button == 1)
+			if (rightMouseButtonDown)
 			{
-				// right click
+				// dragging with right button pressed
 				if (pSpriteObject != null)
 				{
 					DestroyImmediate(pSpriteObject);
@@ -86,9 +106,12 @@ public class TilesSettingsEditor : Editor
 			}
 		}
 
+		// mouse up event
 		if (e.isMouse && e.type == EventType.MouseUp)
 		{
 			GUIUtility.hotControl = 0;
+			leftMouseButtonDown = false;
+			rightMouseButtonDown = false;
 		}
 	}
 
