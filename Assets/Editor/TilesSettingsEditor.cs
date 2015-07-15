@@ -9,7 +9,7 @@ using System.Linq;
 public class TilesSettingsEditor : Editor
 {
 	private TilesSettings tilesSettings;
-	private List<Sprite> tiles;
+	private List<SpriteRenderer> tiles;
 	private int selectedTile;
 	private GameObject tilesGameObject;
 	private bool leftMouseButtonDown = false;
@@ -22,15 +22,28 @@ public class TilesSettingsEditor : Editor
 		tilesGameObject = tilesSettings.gameObject;
 
 		// create tiles list from resources
-		tiles = new List<Sprite>();
-		string sTilesPath = Application.dataPath + "/Resources/Textures/Tiles/Grass/";
-		foreach (string sTilePath in Directory.GetFiles(sTilesPath, "*.png"))
+		tiles = new List<SpriteRenderer>();
+		string sTilesPath = Application.dataPath + "/Resources/Prefabs/Tiles/";
+		foreach (string sTilePath in Directory.GetFiles(sTilesPath, "*.prefab", SearchOption.AllDirectories))
 		{
-			string sTileName = Path.GetFileNameWithoutExtension(sTilePath);
-			Sprite pSprite = Resources.Load<Sprite>("Textures/Tiles/Grass/" + sTileName);
-			if (pSprite != null)
+			// leave only part of the path after Resources folder
+			int indexOfResourcesSubstring = sTilePath.IndexOf("Resources");
+			if (indexOfResourcesSubstring >= 0)
 			{
-				tiles.Add(pSprite);
+				indexOfResourcesSubstring += "Resources/".Length;
+				string sResourcePath = sTilePath.Substring(indexOfResourcesSubstring);
+				// trim prefab file extension and change backslashes to forward slashes (unity needs forward slash when loading resources)
+				sResourcePath = sResourcePath.Replace(".prefab", "").Replace('\\', '/');
+				// load prefab and get sprite renderer component
+				GameObject pTilePrefab = Resources.Load<GameObject>(sResourcePath);
+				if (pTilePrefab != null)
+				{
+					SpriteRenderer pSpriteRenderer = pTilePrefab.GetComponent<SpriteRenderer>();
+					if (pSpriteRenderer != null)
+					{
+						tiles.Add(pSpriteRenderer);
+					}
+				}
 			}
 		}
 	}
@@ -53,11 +66,11 @@ public class TilesSettingsEditor : Editor
 		GUILayout.BeginVertical();
 		GUILayout.Space(30);
 		GUILayout.Label("Tiles: ");
-		selectedTile = GUILayout.SelectionGrid(selectedTile, tiles.Select(x => x.texture).ToArray(), 10, GUILayout.ExpandWidth(false));	
+		selectedTile = GUILayout.SelectionGrid(selectedTile, tiles.Select(x => x.sprite.texture).ToArray(), 10, GUILayout.ExpandWidth(false));	
 		GUILayout.EndVertical();
 	}
 
-	void OnSceneGUI(/*SceneView sceneview*/)
+	void OnSceneGUI()
 	{
 		int controlID = GUIUtility.GetControlID(FocusType.Passive);
 		Event e = Event.current;
@@ -88,17 +101,19 @@ public class TilesSettingsEditor : Editor
 			vPos = tilesSettings.GetAlignedVector3(vPos);
 			GameObject pSpriteObject = GetGameObjectFromPosition(vPos);
 
+			// dragging with left button pressed
 			if (leftMouseButtonDown)
 			{
-				// dragging with left button pressed
+				// create tile when none exists on that position
 				if (pSpriteObject == null)
 				{
 					CreateTile(vPos);
 				}
 			}
+			// dragging with right button pressed
 			if (rightMouseButtonDown)
 			{
-				// dragging with right button pressed
+				// delete tile when one exists on that position
 				if (pSpriteObject != null)
 				{
 					DestroyImmediate(pSpriteObject);
@@ -117,13 +132,13 @@ public class TilesSettingsEditor : Editor
 
 	void CreateTile(Vector3 vPos)
 	{
-		GameObject pSpriteObject = new GameObject();
-		SpriteRenderer pRenderer = pSpriteObject.AddComponent<SpriteRenderer>();
-		pRenderer.sortingLayerName = "Ground";
-		pRenderer.sprite = tiles[selectedTile];
-		pSpriteObject.name = tiles[selectedTile].name + "_" + vPos.x + "_" + vPos.y;
-		pSpriteObject.transform.parent = tilesGameObject.transform;
-		pSpriteObject.transform.position = new Vector3(vPos.x, vPos.y, 0);
+		SpriteRenderer pSpriteRenderer = tiles[selectedTile];
+		GameObject pTile = GameObject.Instantiate(pSpriteRenderer.gameObject, vPos, Quaternion.identity) as GameObject;
+		if (pTile != null)
+		{
+			pTile.name = pSpriteRenderer.sprite.texture.name + "_" + vPos.x + "_" + vPos.y;
+			pTile.transform.parent = tilesGameObject.transform;
+		}
 	}
 
 	GameObject GetGameObjectFromPosition(Vector3 vPos)

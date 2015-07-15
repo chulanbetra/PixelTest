@@ -18,7 +18,7 @@ public class Tile
 			m_iLevel = value;
 		}
 	}
-	
+	public eTileFlag Flag;
 	// tile mask
 	public int TileMask;
 	
