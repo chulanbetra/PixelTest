@@ -40,7 +40,6 @@ public sealed class LevelData :MonoBehaviour
 	Tile CreateTile()
 	{
 		Tile pTile = new Tile();
-		pTile.Level = 0;
 		pTile.SetFlag(eTileFlag.WALKABLE);
 		return pTile;
 	}

@@ -1,11 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Editor\TilesSettingsEditor.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Core\Tile.cs">
     <Files>
-      <File FileName="Assets\Scripts\Core\Tile.cs" Line="21" Column="24" />
-      <File FileName="Assets\Editor\TilesSettingsEditor.cs" Line="43" Column="7" />
-      <File FileName="Assets\Scripts\Level\TilesSettings.cs" Line="6" Column="30" />
-      <File FileName="Assets\Scripts\Camera\PlayerController.cs" Line="21" Column="32" />
+      <File FileName="Assets\Scripts\Core\Tile.cs" Line="25" Column="4" />
+      <File FileName="Assets\Scripts\Camera\PlayerController.cs" Line="6" Column="34" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

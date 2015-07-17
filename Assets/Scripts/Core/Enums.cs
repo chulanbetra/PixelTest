@@ -3,17 +3,18 @@
 // tile flags
 public enum eTileFlag
 {
-	NONE = 0x00,
-	// flags for moving
-	WALKABLE = 0x01,	
+	// player can move on this tile
+	WALKABLE = 0x01,
+	// AI can move o nthis tile
+	AI_WALKABLE = 0x02,
 	// dynamics (actors, destroyable objects etc)
-	OBSTACLE = 0x2,
+	OBSTACLE = 0x04,
 	// can be moved through by animation
-	CRAWL_UNDER = 0x4,
-	JUMP_OVER = 0x8,
+	CRAWL_UNDER = 0x08,
+	JUMP_OVER = 0x10,
 }
 
-// nodes neighbor direction
+// tile neighbor directions
 public enum eDirection
 {
 	UP = 0,
