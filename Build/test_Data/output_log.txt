@@ -1,0 +1,25 @@
+Initialize engine version: 5.1.1f1 (2046fc06d4d8)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 9.0c [nv4_disp.dll 6.14.13.3182]
+    Renderer: NVIDIA GeForce GTX 460
+    Vendor:   NVIDIA
+    VRAM:     1024 MB (via registry)
+    Caps:     Shader=30 DepthRT=1 NativeDepth=1 NativeShadow=1 DF16=0 INTZ=1 NULL=1 RESZ=0 SlowINTZ=0
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Projects\Developing\PixelTest\Build\test_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Projects\Developing\PixelTest\Build\test_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Projects\Developing\PixelTest\Build\test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Projects\Developing\PixelTest\Build\test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Projects\Developing\PixelTest\Build\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Projects\Developing\PixelTest\Build\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Projects\Developing\PixelTest\Build\test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Projects\Developing\PixelTest\Build\test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Projects\Developing\PixelTest\Build\test_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading D:\Projects\Developing\PixelTest\Build\test_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+- Completed reload, in  0.072 seconds
+desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+Platform assembly: D:\Projects\Developing\PixelTest\Build\test_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Projects\Developing\PixelTest\Build\test_Data\Managed\System.dll (this message is harmless)
