@@ -21,7 +21,11 @@ public class TilesSettingsEditor : Editor
 		tilesSettings = (TilesSettings)target;
 		tilesGameObject = tilesSettings.gameObject;
 
-		// create tiles list from resources
+		CreateTilesList();
+	}
+
+	private void CreateTilesList()
+	{
 		tiles = new List<SpriteRenderer>();
 		string sTilesPath = Application.dataPath + "/Resources/Prefabs/Tiles/";
 		foreach (string sTilePath in Directory.GetFiles(sTilesPath, "*.prefab", SearchOption.AllDirectories))
@@ -66,7 +70,7 @@ public class TilesSettingsEditor : Editor
 		GUILayout.BeginVertical();
 		GUILayout.Space(30);
 		GUILayout.Label("Tiles: ");
-		selectedTile = GUILayout.SelectionGrid(selectedTile, tiles.Select(x => x.sprite.texture).ToArray(), 10, GUILayout.ExpandWidth(false));	
+		selectedTile = GUILayout.SelectionGrid(selectedTile, tiles.Select(x => x.sprite.texture).ToArray(), 8, GUILayout.ExpandWidth(false));	
 		GUILayout.EndVertical();
 	}
 
