@@ -70,7 +70,7 @@ public class TilesSettingsEditor : Editor
 		GUILayout.BeginVertical();
 		GUILayout.Space(30);
 		GUILayout.Label("Tiles: ");
-		selectedTile = GUILayout.SelectionGrid(selectedTile, tiles.Select(x => x.sprite.texture).ToArray(), 8, GUILayout.ExpandWidth(false));	
+		selectedTile = GUILayout.SelectionGrid(selectedTile, tiles.Select(x => x.sprite.texture).ToArray(), 5, GUILayout.ExpandWidth(false));	
 		GUILayout.EndVertical();
 	}
 
@@ -134,29 +134,30 @@ public class TilesSettingsEditor : Editor
 		}
 	}
 
-	void CreateTile(Vector3 vPos)
+	private void CreateTile(Vector3 vPos)
 	{
 		SpriteRenderer pSpriteRenderer = tiles[selectedTile];
-		GameObject pTile = GameObject.Instantiate(pSpriteRenderer.gameObject, vPos, Quaternion.identity) as GameObject;
+		GameObject pTile = PrefabUtility.InstantiatePrefab(pSpriteRenderer.gameObject) as GameObject;
 		if (pTile != null)
 		{
+			pTile.transform.position = vPos;
 			pTile.name = pSpriteRenderer.sprite.texture.name + "_" + vPos.x + "_" + vPos.y;
 			pTile.transform.parent = tilesGameObject.transform;
 		}
 	}
 
-	GameObject GetGameObjectFromPosition(Vector3 vPos)
+	private GameObject GetGameObjectFromPosition(Vector3 vPos)
 	{
 		if (tilesGameObject != null)
 		{
 			for (int i = 0; i < tilesGameObject.transform.childCount; i++)
-		    {
+			{
 				Transform pChild = tilesGameObject.transform.GetChild(i);
 				if (pChild.position == vPos)
 				{
 					return pChild.gameObject;
 				}
-		    }
+			}
 		}
 		return null;
 	}

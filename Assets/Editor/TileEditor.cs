@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System;
 
 [CustomEditor(typeof(Tile))]
 public class TileEditor : Editor 
@@ -14,7 +15,18 @@ public class TileEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
-		tile.Flags = (eTileFlag)EditorGUILayout.EnumMaskField("Flags", tile.Flags);		
-		tile.Directions = (eDirection)EditorGUILayout.EnumMaskField("Directions", tile.Directions);		
+		foreach (var value in Enum.GetValues(typeof(eTileFlag)))
+		{
+			eTileFlag flag = (eTileFlag)value;
+			bool hasFlag = EditorGUILayout.Toggle(value.ToString(), tile.HasFlag(flag));
+			if (hasFlag)
+			{
+				tile.SetFlag(flag);
+			}
+			else
+			{
+				tile.ClearFlag(flag);
+			}
+		}
 	}
 }

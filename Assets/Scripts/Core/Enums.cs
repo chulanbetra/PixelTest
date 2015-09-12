@@ -5,13 +5,10 @@ public enum eTileFlag
 {
 	// player can move on this tile
 	WALKABLE = 0x01,
-	// AI can move o nthis tile
+	// AI can move on this tile
 	AI_WALKABLE = 0x02,
-	// dynamics (actors, destroyable objects etc)
+	// dynamics (enemies, npcs, destroyable objects etc.)
 	OBSTACLE = 0x04,
-	// can be moved through by animation
-	CRAWL_UNDER = 0x08,
-	JUMP_OVER = 0x10,
 }
 
 // tile neighbor directions

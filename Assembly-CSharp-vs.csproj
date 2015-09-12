@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\Core\Enums.cs" />
      <Compile Include="Assets\Scripts\Core\Point.cs" />
      <Compile Include="Assets\Scripts\Core\Tile.cs" />
+     <Compile Include="Assets\Scripts\Core\TileHelper.cs" />
      <Compile Include="Assets\Scripts\Level\LevelData.cs" />
      <Compile Include="Assets\Scripts\Level\TilesSettings.cs" />
  <Reference Include="UnityEngine.UI">
