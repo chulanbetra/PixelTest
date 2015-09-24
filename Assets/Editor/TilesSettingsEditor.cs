@@ -142,6 +142,7 @@ public class TilesSettingsEditor : Editor
 		{
 			pTile.transform.position = vPos;
 			pTile.name = pSpriteRenderer.sprite.texture.name + "_" + vPos.x + "_" + vPos.y;
+			pTile.tag = "Tile";
 			pTile.transform.parent = tilesGameObject.transform;
 		}
 	}

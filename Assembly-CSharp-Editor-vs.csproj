@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Editor\AIMenu.cs" />
      <Compile Include="Assets\Editor\TileEditor.cs" />
      <Compile Include="Assets\Editor\TilesSettingsEditor.cs" />
  <Reference Include="UnityEngine.UI">

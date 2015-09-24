@@ -46,13 +46,12 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\AI\AIHelper.cs" />
+     <Compile Include="Assets\Scripts\AI\AINode.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
      <Compile Include="Assets\Scripts\Camera\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Core\Enums.cs" />
-     <Compile Include="Assets\Scripts\Core\Point.cs" />
      <Compile Include="Assets\Scripts\Core\Tile.cs" />
-     <Compile Include="Assets\Scripts\Core\TileHelper.cs" />
-     <Compile Include="Assets\Scripts\Level\LevelData.cs" />
      <Compile Include="Assets\Scripts\Level\TilesSettings.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/tools/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

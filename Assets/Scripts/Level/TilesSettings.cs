@@ -11,11 +11,6 @@ public class TilesSettings : MonoBehaviour
 		return new Vector3(i * TileWidth + TileWidth * 0.5f, j * TileWidth + TileWidth * 0.5f, 0);
 	}
 	
-	public Vector3 PointToVector3(Point pPoint)
-	{
-		return new Vector3(pPoint.X * TileWidth + TileWidth * 0.5f, pPoint.Y * TileWidth + TileWidth * 0.5f, 0);
-	}
-	
 	public Vector3 GetAlignedVector3(Vector3 v)
 	{
 		return new Vector3(Mathf.FloorToInt(v.x / TileWidth) * TileWidth + TileWidth * 0.5f, Mathf.FloorToInt(v.y / TileWidth) * TileWidth + TileWidth * 0.5f, 0);
