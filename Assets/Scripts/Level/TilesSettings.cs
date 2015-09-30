@@ -18,15 +18,20 @@ public class TilesSettings : MonoBehaviour
 
 	void OnDrawGizmos()
 	{
+		GizmosDrawGrid();
+	}
+
+	void GizmosDrawGrid()
+	{
 		Vector3 vPos = Camera.current.transform.position;
 		Gizmos.color = this.GridColor;
-
+		
 		for (float y = vPos.y - 800.0f; y < vPos.y + 800.0f; y += this.TileWidth)
 		{
 			Gizmos.DrawLine(new Vector3(-10000.0f, Mathf.Floor(y / this.TileWidth) * this.TileWidth, 0), 
 			                new Vector3(10000.0f, Mathf.Floor(y / this.TileWidth) * this.TileWidth, 0));
 		}
-
+		
 		for (float x = vPos.x - 1200.0f; x < vPos.x + 1200.0f; x += this.TileWidth)
 		{
 			Gizmos.DrawLine(new Vector3(Mathf.Floor(x / this.TileWidth) * this.TileWidth, -10000.0f, 0), 

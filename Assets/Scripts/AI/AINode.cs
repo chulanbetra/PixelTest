@@ -6,9 +6,8 @@ public class AINode : MonoBehaviour
 {
 	public Dictionary<eDirection, AINode> Neighbors;
 
-	// Use this for initialization
-	void Start () 
-	{	
+	public void Init()
+	{
 		Neighbors = new Dictionary<eDirection, AINode>();
 		Neighbors.Add(eDirection.UP, null);
 		Neighbors.Add(eDirection.DOWN, null);
@@ -18,6 +17,11 @@ public class AINode : MonoBehaviour
 		Neighbors.Add(eDirection.UP_RIGHT, null);
 		Neighbors.Add(eDirection.DOWN_LEFT, null);
 		Neighbors.Add(eDirection.DOWN_RIGHT, null);
+	}
+
+	// Use this for initialization
+	void Start () 
+	{	
 	}
 	
 	// Update is called once per frame

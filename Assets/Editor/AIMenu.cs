@@ -10,10 +10,15 @@ public class AIMenu : ScriptableObject
 		GameObject tilesObject = GameObject.Find("Tiles");
 		if (tilesObject != null)
 		{
-			AIHelper.RemoveAINodes(tilesObject);
-			AIHelper.AddAINodes(tilesObject);
+			PathgraphGizmo pPathgraphGizmo = tilesObject.GetComponent<PathgraphGizmo>();
+			if (pPathgraphGizmo != null)
+			{
+				pPathgraphGizmo.CanDrawGizmo = false;
+				AIHelper.RemoveAINodes(tilesObject);
+				AIHelper.AddAINodes(tilesObject);
+				AIHelper.ConnectAINodes(tilesObject);
+				pPathgraphGizmo.CanDrawGizmo = true;
+			}
 		}
 	}
-
-
 }
