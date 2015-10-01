@@ -3,8 +3,6 @@ using System.Collections;
 
 public class PathgraphGizmo : MonoBehaviour 
 {
-	public bool CanDrawGizmo;
-
 	// Use this for initialization
 	void Start () 
 	{	
@@ -23,7 +21,7 @@ public class PathgraphGizmo : MonoBehaviour
 	void GizmosDrawPathgraph()
 	{
 		TilesSettings pTilesSettings = this.GetComponent<TilesSettings>();
-		if (pTilesSettings != null && CanDrawGizmo)
+		if (pTilesSettings != null)
 		{
 			float fTileWidth = pTilesSettings.TileWidth;
 			foreach (AINode aiNode in this.gameObject.GetComponentsInChildren<AINode>())
@@ -32,7 +30,7 @@ public class PathgraphGizmo : MonoBehaviour
 				Gizmos.DrawSphere(aiNode.transform.position, fTileWidth / 3);
 
 				Gizmos.color = Color.red;
-				foreach (AINode aiNeighbor in aiNode.Neighbors.Values)
+				foreach (AINode aiNeighbor in aiNode.Neighbors)
 				{
 					if (aiNeighbor != null)
 					{

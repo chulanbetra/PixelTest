@@ -4,19 +4,26 @@ using System.Collections.Generic;
 
 public class AINode : MonoBehaviour 
 {
-	public Dictionary<eDirection, AINode> Neighbors;
+	// 0 - up
+	// 1 - down
+	// 2 - left
+	// 3 - right
+	// 4 - up left
+	// 5 - up right
+	// 6 - down left
+	// 7 - down right
+	public AINode[] Neighbors = new AINode[8];
 
-	public void Init()
+	public Tile Tile
 	{
-		Neighbors = new Dictionary<eDirection, AINode>();
-		Neighbors.Add(eDirection.UP, null);
-		Neighbors.Add(eDirection.DOWN, null);
-		Neighbors.Add(eDirection.LEFT, null);
-		Neighbors.Add(eDirection.RIGHT, null);
-		Neighbors.Add(eDirection.UP_LEFT, null);
-		Neighbors.Add(eDirection.UP_RIGHT, null);
-		Neighbors.Add(eDirection.DOWN_LEFT, null);
-		Neighbors.Add(eDirection.DOWN_RIGHT, null);
+		get
+		{
+			return this.gameObject.GetComponent<Tile>();
+		}
+	}
+
+	void Awake()
+	{
 	}
 
 	// Use this for initialization

@@ -1,27 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 public class AIHelper
 {
 	public static void RemoveAINodes(GameObject tilesObject)
 	{
-		foreach (AINode aiNode in tilesObject.GetComponentsInChildren<AINode>())
+		Transform transformTilesObject = tilesObject.transform;
+		for (int i = 0; i < transformTilesObject.childCount; i++)
 		{
-			Object.DestroyImmediate(aiNode);
+			Transform tileObject = transformTilesObject.GetChild(i);
+			foreach (AINode aiNode in tileObject.GetComponents<AINode>())
+			{
+				Object.DestroyImmediate(aiNode);
+			}
 		}
 	}
 
 	public static void AddAINodes(GameObject tilesObject)
 	{
 		Transform transformTilesObject = tilesObject.transform;
-		for (int i= 0; i < transformTilesObject.childCount; i++)
+		for (int i = 0; i < transformTilesObject.childCount; i++)
 		{
 			Transform tileObject = transformTilesObject.GetChild(i);
 			if (tileObject != null && tileObject.gameObject != null)
 			{
-				AINode aiNode = tileObject.gameObject.AddComponent<AINode>();
-				aiNode.Init();
+				Tile tile = tileObject.GetComponent<Tile>();
+				if (tile != null && tile.HasFlag(eTileFlag.AI_WALKABLE))
+				{
+					tileObject.gameObject.AddComponent<AINode>();
+				}
 			}
 		}
 	}
@@ -33,21 +42,37 @@ public class AIHelper
 		{
 			Vector3 vPos = aiNode.transform.position;
 			// up
-			aiNode.Neighbors[eDirection.UP] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up).FirstOrDefault();
+			aiNode.Neighbors[0] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up).FirstOrDefault();
 			// down
-			aiNode.Neighbors[eDirection.DOWN] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up).FirstOrDefault();
+			aiNode.Neighbors[1] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up).FirstOrDefault();
 			// left
-			aiNode.Neighbors[eDirection.LEFT] = aiNodes.Where(node => node.transform.position == vPos - Vector3.right).FirstOrDefault();
+			aiNode.Neighbors[2] = aiNodes.Where(node => node.transform.position == vPos - Vector3.right).FirstOrDefault();
 			// right
-			aiNode.Neighbors[eDirection.RIGHT] = aiNodes.Where(node => node.transform.position == vPos + Vector3.right).FirstOrDefault();
+			aiNode.Neighbors[3] = aiNodes.Where(node => node.transform.position == vPos + Vector3.right).FirstOrDefault();
 			// up-left
-			aiNode.Neighbors[eDirection.UP_LEFT] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up - Vector3.right).FirstOrDefault();
+			if (aiNode.Neighbors[0] != null && aiNode.Neighbors[0].Tile != null && aiNode.Neighbors[0].Tile.HasFlag(eTileFlag.AI_WALKABLE) &&
+			    aiNode.Neighbors[2] != null && aiNode.Neighbors[2].Tile != null && aiNode.Neighbors[2].Tile.HasFlag(eTileFlag.AI_WALKABLE))
+			{
+				aiNode.Neighbors[4] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up - Vector3.right).FirstOrDefault();
+			}
 			// up-right
-			aiNode.Neighbors[eDirection.UP_RIGHT] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up + Vector3.right).FirstOrDefault();
+			if (aiNode.Neighbors[0] != null && aiNode.Neighbors[0].Tile != null && aiNode.Neighbors[0].Tile.HasFlag(eTileFlag.AI_WALKABLE) &&
+			    aiNode.Neighbors[3] != null && aiNode.Neighbors[3].Tile != null && aiNode.Neighbors[3].Tile.HasFlag(eTileFlag.AI_WALKABLE))
+			{
+				aiNode.Neighbors[5] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up + Vector3.right).FirstOrDefault();
+			}
 			// down-left
-			aiNode.Neighbors[eDirection.DOWN_LEFT] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up - Vector3.right).FirstOrDefault();
+			if (aiNode.Neighbors[1] != null && aiNode.Neighbors[1].Tile != null && aiNode.Neighbors[1].Tile.HasFlag(eTileFlag.AI_WALKABLE) &&
+			    aiNode.Neighbors[2] != null && aiNode.Neighbors[2].Tile != null && aiNode.Neighbors[2].Tile.HasFlag(eTileFlag.AI_WALKABLE))
+			{
+				aiNode.Neighbors[6] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up - Vector3.right).FirstOrDefault();
+			}
 			// down-right
-			aiNode.Neighbors[eDirection.DOWN_RIGHT] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up + Vector3.right).FirstOrDefault();
+			if (aiNode.Neighbors[1] != null && aiNode.Neighbors[1].Tile != null && aiNode.Neighbors[1].Tile.HasFlag(eTileFlag.AI_WALKABLE) &&
+			    aiNode.Neighbors[3] != null && aiNode.Neighbors[3].Tile != null && aiNode.Neighbors[3].Tile.HasFlag(eTileFlag.AI_WALKABLE))
+			{
+				aiNode.Neighbors[7] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up + Vector3.right).FirstOrDefault();
+			}
 		}
 	}
 }
