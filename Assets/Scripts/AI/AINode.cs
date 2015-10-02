@@ -22,6 +22,16 @@ public class AINode : MonoBehaviour
 		}
 	}
 
+	public void SetNeighbor(eDirection dir, AINode aiNode)
+	{
+		Neighbors[(int)dir] = aiNode;
+	}
+
+	public AINode GetNeighbor(eDirection dir)
+	{
+		return Neighbors[(int)dir];
+	}
+
 	void Awake()
 	{
 	}

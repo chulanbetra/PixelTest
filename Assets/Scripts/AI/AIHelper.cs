@@ -26,6 +26,7 @@ public class AIHelper
 			Transform tileObject = transformTilesObject.GetChild(i);
 			if (tileObject != null && tileObject.gameObject != null)
 			{
+				// create AI nodes only on ai walkable tiles
 				Tile tile = tileObject.GetComponent<Tile>();
 				if (tile != null && tile.HasFlag(eTileFlag.AI_WALKABLE))
 				{
@@ -42,36 +43,32 @@ public class AIHelper
 		{
 			Vector3 vPos = aiNode.transform.position;
 			// up
-			aiNode.Neighbors[0] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up).FirstOrDefault();
+			aiNode.SetNeighbor(eDirection.Up, aiNodes.Where(node => node.transform.position == vPos + Vector3.up).FirstOrDefault());
 			// down
-			aiNode.Neighbors[1] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up).FirstOrDefault();
+			aiNode.SetNeighbor(eDirection.Down, aiNodes.Where(node => node.transform.position == vPos - Vector3.up).FirstOrDefault());
 			// left
-			aiNode.Neighbors[2] = aiNodes.Where(node => node.transform.position == vPos - Vector3.right).FirstOrDefault();
+			aiNode.SetNeighbor(eDirection.Left, aiNodes.Where(node => node.transform.position == vPos - Vector3.right).FirstOrDefault());
 			// right
-			aiNode.Neighbors[3] = aiNodes.Where(node => node.transform.position == vPos + Vector3.right).FirstOrDefault();
+			aiNode.SetNeighbor(eDirection.Right, aiNodes.Where(node => node.transform.position == vPos + Vector3.right).FirstOrDefault());
 			// up-left
-			if (aiNode.Neighbors[0] != null && aiNode.Neighbors[0].Tile != null && aiNode.Neighbors[0].Tile.HasFlag(eTileFlag.AI_WALKABLE) &&
-			    aiNode.Neighbors[2] != null && aiNode.Neighbors[2].Tile != null && aiNode.Neighbors[2].Tile.HasFlag(eTileFlag.AI_WALKABLE))
+			if (aiNode.GetNeighbor(eDirection.Up) != null && aiNode.GetNeighbor(eDirection.Left) != null)
 			{
-				aiNode.Neighbors[4] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up - Vector3.right).FirstOrDefault();
+				aiNode.SetNeighbor(eDirection.Up_Left, aiNodes.Where(node => node.transform.position == vPos + Vector3.up - Vector3.right).FirstOrDefault());
 			}
 			// up-right
-			if (aiNode.Neighbors[0] != null && aiNode.Neighbors[0].Tile != null && aiNode.Neighbors[0].Tile.HasFlag(eTileFlag.AI_WALKABLE) &&
-			    aiNode.Neighbors[3] != null && aiNode.Neighbors[3].Tile != null && aiNode.Neighbors[3].Tile.HasFlag(eTileFlag.AI_WALKABLE))
+			if (aiNode.GetNeighbor(eDirection.Up) != null && aiNode.GetNeighbor(eDirection.Right) != null)
 			{
-				aiNode.Neighbors[5] = aiNodes.Where(node => node.transform.position == vPos + Vector3.up + Vector3.right).FirstOrDefault();
+				aiNode.SetNeighbor(eDirection.Up_Right, aiNodes.Where(node => node.transform.position == vPos + Vector3.up + Vector3.right).FirstOrDefault());
 			}
 			// down-left
-			if (aiNode.Neighbors[1] != null && aiNode.Neighbors[1].Tile != null && aiNode.Neighbors[1].Tile.HasFlag(eTileFlag.AI_WALKABLE) &&
-			    aiNode.Neighbors[2] != null && aiNode.Neighbors[2].Tile != null && aiNode.Neighbors[2].Tile.HasFlag(eTileFlag.AI_WALKABLE))
+			if (aiNode.GetNeighbor(eDirection.Down) != null && aiNode.GetNeighbor(eDirection.Left) != null)
 			{
-				aiNode.Neighbors[6] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up - Vector3.right).FirstOrDefault();
+				aiNode.SetNeighbor(eDirection.Down_Left, aiNodes.Where(node => node.transform.position == vPos - Vector3.up - Vector3.right).FirstOrDefault());
 			}
 			// down-right
-			if (aiNode.Neighbors[1] != null && aiNode.Neighbors[1].Tile != null && aiNode.Neighbors[1].Tile.HasFlag(eTileFlag.AI_WALKABLE) &&
-			    aiNode.Neighbors[3] != null && aiNode.Neighbors[3].Tile != null && aiNode.Neighbors[3].Tile.HasFlag(eTileFlag.AI_WALKABLE))
+			if (aiNode.GetNeighbor(eDirection.Down) != null && aiNode.GetNeighbor(eDirection.Right) != null)
 			{
-				aiNode.Neighbors[7] = aiNodes.Where(node => node.transform.position == vPos - Vector3.up + Vector3.right).FirstOrDefault();
+				aiNode.SetNeighbor(eDirection.Down_Right, aiNodes.Where(node => node.transform.position == vPos - Vector3.up + Vector3.right).FirstOrDefault());
 			}
 		}
 	}

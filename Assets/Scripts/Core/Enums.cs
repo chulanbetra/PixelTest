@@ -10,3 +10,15 @@ public enum eTileFlag
 	// dynamics (enemies, npcs, destroyable objects etc.)
 	OBSTACLE = 0x04,
 }
+
+public enum eDirection
+{
+	Up = 0,
+	Down = 1,
+	Left = 2,
+	Right = 3,
+	Up_Left = 4,
+	Up_Right = 5,
+	Down_Left = 6,
+	Down_Right = 7,
+}
