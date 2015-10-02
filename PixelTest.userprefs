@@ -1,10 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Level\PathgraphGizmo.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AI\AIHelper.cs">
     <Files>
-      <File FileName="Assets\Scripts\AI\AINode.cs" Line="32" Column="19" />
-      <File FileName="Assets\Scripts\AI\AIHelper.cs" Line="69" Column="90" />
-      <File FileName="Assets\Scripts\Level\PathgraphGizmo.cs" Line="15" Column="2" />
+      <File FileName="Assets\Scripts\AI\AINode.cs" Line="24" Column="30" />
+      <File FileName="Assets\Scripts\AI\AIHelper.cs" Line="49" Column="11" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
