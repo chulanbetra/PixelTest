@@ -43,32 +43,32 @@ public class AIHelper
 		{
 			Vector3 vPos = aiNode.transform.position;
 			// up
-			aiNode.SetNeighbor(eDirection.Up, aiNodes.Where(node => node.transform.position == vPos + Vector3.up).FirstOrDefault());
+			aiNode.SetNeighbor(eDirection.Up, aiNodes.FirstOrDefault(node => node.transform.position == vPos + Vector3.up));
 			// down
-			aiNode.SetNeighbor(eDirection.Down, aiNodes.Where(node => node.transform.position == vPos - Vector3.up).FirstOrDefault());
+			aiNode.SetNeighbor(eDirection.Down, aiNodes.FirstOrDefault(node => node.transform.position == vPos - Vector3.up));
 			// left
-			aiNode.SetNeighbor(eDirection.Left, aiNodes.Where(node => node.transform.position == vPos - Vector3.right).FirstOrDefault());
+			aiNode.SetNeighbor(eDirection.Left, aiNodes.FirstOrDefault(node => node.transform.position == vPos - Vector3.right));
 			// right
-			aiNode.SetNeighbor(eDirection.Right, aiNodes.Where(node => node.transform.position == vPos + Vector3.right).FirstOrDefault());
+			aiNode.SetNeighbor(eDirection.Right, aiNodes.FirstOrDefault(node => node.transform.position == vPos + Vector3.right));
 			// up-left
 			if (aiNode.GetNeighbor(eDirection.Up) != null && aiNode.GetNeighbor(eDirection.Left) != null)
 			{
-				aiNode.SetNeighbor(eDirection.Up_Left, aiNodes.Where(node => node.transform.position == vPos + Vector3.up - Vector3.right).FirstOrDefault());
+				aiNode.SetNeighbor(eDirection.Up_Left, aiNodes.FirstOrDefault(node => node.transform.position == vPos + Vector3.up - Vector3.right));
 			}
 			// up-right
 			if (aiNode.GetNeighbor(eDirection.Up) != null && aiNode.GetNeighbor(eDirection.Right) != null)
 			{
-				aiNode.SetNeighbor(eDirection.Up_Right, aiNodes.Where(node => node.transform.position == vPos + Vector3.up + Vector3.right).FirstOrDefault());
+				aiNode.SetNeighbor(eDirection.Up_Right, aiNodes.FirstOrDefault(node => node.transform.position == vPos + Vector3.up + Vector3.right));
 			}
 			// down-left
 			if (aiNode.GetNeighbor(eDirection.Down) != null && aiNode.GetNeighbor(eDirection.Left) != null)
 			{
-				aiNode.SetNeighbor(eDirection.Down_Left, aiNodes.Where(node => node.transform.position == vPos - Vector3.up - Vector3.right).FirstOrDefault());
+				aiNode.SetNeighbor(eDirection.Down_Left, aiNodes.FirstOrDefault(node => node.transform.position == vPos - Vector3.up - Vector3.right));
 			}
 			// down-right
 			if (aiNode.GetNeighbor(eDirection.Down) != null && aiNode.GetNeighbor(eDirection.Right) != null)
 			{
-				aiNode.SetNeighbor(eDirection.Down_Right, aiNodes.Where(node => node.transform.position == vPos - Vector3.up + Vector3.right).FirstOrDefault());
+				aiNode.SetNeighbor(eDirection.Down_Right, aiNodes.FirstOrDefault(node => node.transform.position == vPos - Vector3.up + Vector3.right));
 			}
 		}
 	}
