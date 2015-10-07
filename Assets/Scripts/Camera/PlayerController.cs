@@ -5,15 +5,26 @@ using System.Linq;
 public class PlayerController : MonoBehaviour 
 {
 	public float MoveSpeed = 5.0f;  
+	public LayerMask CollisionLayerMask;
 
 	private AINode currentNode;
 	private Sprite sprite;
 	private SpriteRenderer spriteRenderer;
 	private TilesSettings tilesSettings;
+	private Vector2 colliderOffset;
+	private Vector2 coliderSize;
 
 	// Use this for initialization
 	void Start() 
 	{	
+		// get collider data
+		BoxCollider2D boxCollider2D = this.GetComponent<BoxCollider2D>(); 
+		if(boxCollider2D != null)
+		{
+			colliderOffset = boxCollider2D.offset;
+			coliderSize = boxCollider2D.size;
+		}
+
 		// get sprite renderer component and sprite
 		spriteRenderer = this.GetComponent<SpriteRenderer>();
 		if (spriteRenderer != null)
@@ -95,92 +106,76 @@ public class PlayerController : MonoBehaviour
 	// move character according to input
 	private void HandleMovement()
 	{
-		if (Input.GetKey(KeyCode.W)) 
-		{				
-			Vector3 vDir = this.transform.up * MoveSpeed * Time.deltaTime;
-			Vector3 vPos = this.transform.position + vDir;
-			this.transform.position = CheckUpCollision(vPos);;
-		}
-		if (Input.GetKey(KeyCode.S)) 
+		// TODO: clean code + make colision proximity treshold
+		Vector3 vMoveAmount = GetMoveVector();
+		Vector3 vPos = this.transform.position;
+		if (vMoveAmount.x != 0)
 		{
-			Vector3 vDir = this.transform.up * -MoveSpeed * Time.deltaTime;
-			Vector3 vPos = this.transform.position + vDir;
-			this.transform.position = CheckDownCollision(vPos);
+			float fDir = Mathf.Sign(vMoveAmount.x);
+			Vector2 rayDirection = new Vector2(fDir, 0);
+			for (int i = 0; i < 3; i++)
+			{
+				float fX = vPos.x + colliderOffset.x + coliderSize.x * 0.5f * fDir;
+				float fY = vPos.y + colliderOffset.y + coliderSize.x * 0.5f * (i - 1);
+				Vector2 rayOrigin = new Vector2(fX, fY);
+				Debug.DrawRay(rayOrigin, rayDirection);
+
+				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.x), CollisionLayerMask);
+				if (hit.collider != null)
+				{
+					Debug.DrawRay(rayOrigin, rayDirection, Color.yellow);
+					vMoveAmount.x = 0;
+					break;
+				}
+			}
 		}
-		if (Input.GetKey(KeyCode.A))
+		if (vMoveAmount.y != 0)
 		{
-			Vector3 vDir = this.transform.right * -MoveSpeed * Time.deltaTime;
-			Vector3 vPos = this.transform.position + vDir;
-			this.transform.position = CheckLeftCollision(vPos);
+			float fDir = Mathf.Sign(vMoveAmount.y);
+			Vector2 rayDirection = new Vector2(0, fDir);
+			for (int i = 0; i < 3; i++)
+			{
+				float fX = vPos.x + colliderOffset.x + coliderSize.x * 0.5f * (i - 1);
+				float fY = vPos.y + colliderOffset.y + coliderSize.x * 0.5f * fDir;
+				Vector2 rayOrigin = new Vector2(fX, fY);
+				Debug.DrawRay(rayOrigin, rayDirection);
+
+				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.x), CollisionLayerMask);
+				if (hit.collider != null)
+				{
+					Debug.DrawRay(rayOrigin, rayDirection, Color.yellow);
+					vMoveAmount.y = 0;
+					break;
+				}
+			}
 		}
+		this.transform.position += vMoveAmount;
+	}
+
+	// return move vector based on keys pressed
+	private Vector3 GetMoveVector()
+	{
+		Vector3 vDir = Vector3.zero;
+		// right
 		if (Input.GetKey(KeyCode.D)) 
 		{				
-			Vector3 vDir = this.transform.right * MoveSpeed * Time.deltaTime;
-			Vector3 vPos = this.transform.position + vDir;
-			this.transform.position = CheckRightCollision(vPos);
+			vDir.x = MoveSpeed * Time.deltaTime;
 		}
-	}
-	// TODO: diagonal tiles
-	private Vector3 CheckUpCollision(Vector3 vPos)
-	{
-		Vector3 vNodePos = currentNode.transform.position;
-		if (currentNode.GetNeighbor(eDirection.Up))
+		// left
+		if (Input.GetKey(KeyCode.A))
 		{
-			return vPos;
+			vDir.x = -MoveSpeed * Time.deltaTime;
 		}
-		else
+		// up
+		if (Input.GetKey(KeyCode.W)) 
+		{				
+			vDir.y = MoveSpeed * Time.deltaTime;
+		}
+		// down
+		if (Input.GetKey(KeyCode.S)) 
 		{
-			vPos.y = vNodePos.y - tilesSettings.TileWidth * 0.5f;
-			return vPos;
+			vDir.y = -MoveSpeed * Time.deltaTime;
 		}
-	}
-
-	private Vector3 CheckDownCollision(Vector3 vPos)
-	{
-		Vector3 vNodePos = currentNode.transform.position;
-		if (currentNode.GetNeighbor(eDirection.Down) || vPos.y > vNodePos.y - tilesSettings.TileWidth * 0.5f)
-		{
-			return vPos;
-		}
-		else
-		{
-			vPos.y = vNodePos.y - tilesSettings.TileWidth * 0.5f;
-			return vPos;
-		}
-	}
-
-	private Vector3 CheckLeftCollision(Vector3 vPos)
-	{
-		Vector3 vNodePos = currentNode.transform.position;
-		AINode aiNode = currentNode.GetNeighbor(eDirection.Left);
-		if (aiNode != null || vPos.x > vNodePos.x)
-		{
-			Debug.Log("vPos.x " + vPos.x);
-			Debug.Log("vNodePos.x " + vNodePos.x);
-			Debug.Log("no collision");
-			return vPos;
-		}
-		else
-		{
-			Debug.Log("vPos.x " + vPos.x);
-			Debug.Log("vNodePos.x " + vNodePos.x);
-			Debug.Log("collision");
-			vPos.x = vNodePos.x;
-			return vPos;
-		}
-	}
-
-	private Vector3 CheckRightCollision(Vector3 vPos)
-	{
-		Vector3 vNodePos = currentNode.transform.position;
-		if (currentNode.GetNeighbor(eDirection.Right) || vPos.x < vNodePos.x)
-		{
-			return vPos;
-		}
-		else
-		{
-			vPos.x = vNodePos.x;
-			return vPos;
-		}
+		return vDir;
 	}
 }
