@@ -106,11 +106,18 @@ public class PlayerController : MonoBehaviour
 	// move character according to input
 	private void HandleMovement()
 	{
-		// TODO: clean code + make colision proximity treshold
-		Vector3 vMoveAmount = GetMoveVector();
-		Vector3 vPos = this.transform.position;
+		Vector3 vMoveAmount = GetMoveAmount();
+		CheckCollisionX(ref vMoveAmount);
+		CheckCollisionY(ref vMoveAmount);
+		this.transform.Translate (vMoveAmount);
+	}
+
+	// check horizontal collisions and update move amount
+	private void CheckCollisionX(ref Vector3 vMoveAmount)
+	{
 		if (vMoveAmount.x != 0)
 		{
+			Vector3 vPos = this.transform.position;
 			float fDir = Mathf.Sign(vMoveAmount.x);
 			Vector2 rayDirection = new Vector2(fDir, 0);
 			for (int i = 0; i < 3; i++)
@@ -119,7 +126,7 @@ public class PlayerController : MonoBehaviour
 				float fY = vPos.y + colliderOffset.y + coliderSize.x * 0.5f * (i - 1);
 				Vector2 rayOrigin = new Vector2(fX, fY);
 				Debug.DrawRay(rayOrigin, rayDirection);
-
+				
 				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.x), CollisionLayerMask);
 				if (hit.collider != null)
 				{
@@ -129,8 +136,14 @@ public class PlayerController : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	// check vertical collisions and update move amount
+	private void CheckCollisionY(ref Vector3 vMoveAmount)
+	{
 		if (vMoveAmount.y != 0)
 		{
+			Vector3 vPos = this.transform.position;
 			float fDir = Mathf.Sign(vMoveAmount.y);
 			Vector2 rayDirection = new Vector2(0, fDir);
 			for (int i = 0; i < 3; i++)
@@ -139,21 +152,20 @@ public class PlayerController : MonoBehaviour
 				float fY = vPos.y + colliderOffset.y + coliderSize.x * 0.5f * fDir;
 				Vector2 rayOrigin = new Vector2(fX, fY);
 				Debug.DrawRay(rayOrigin, rayDirection);
-
-				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.x), CollisionLayerMask);
+				
+				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.y), CollisionLayerMask);
 				if (hit.collider != null)
 				{
 					Debug.DrawRay(rayOrigin, rayDirection, Color.yellow);
-					vMoveAmount.y = 0;
+					vMoveAmount.y = 0;		
 					break;
 				}
 			}
 		}
-		this.transform.position += vMoveAmount;
 	}
 
 	// return move vector based on keys pressed
-	private Vector3 GetMoveVector()
+	private Vector3 GetMoveAmount()
 	{
 		Vector3 vDir = Vector3.zero;
 		// right
