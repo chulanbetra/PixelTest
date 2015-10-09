@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
 	private Vector2 colliderOffset;
 	private Vector2 coliderSize;
 
+	//private Transform char1;
+	//private Transform char2;
+
 	// Use this for initialization
 	void Start() 
 	{	
@@ -42,6 +45,9 @@ public class PlayerController : MonoBehaviour
 			currentNode = aiNodes.FirstOrDefault(node => Mathf.Abs(node.transform.position.x - vPos.x) <= fTileWidthHalf && 
 			                                     Mathf.Abs(node.transform.position.y - vPos.y) <= fTileWidthHalf);
 		}
+
+		//char1 = GameObject.Find("char1").transform;
+		//char2 = GameObject.Find("char2").transform;
 	}
 	
 	// Update is called once per frame
@@ -49,6 +55,14 @@ public class PlayerController : MonoBehaviour
 	{	
 		HandleMovement();
 		UpdateCurrentTile();
+
+		// moving other characters behind player like train (Albion style), nned to fix collisions
+		/*Vector3 dir1 = this.transform.position - char1.position;
+		dir1.Normalize();
+		Vector3 dir2 = char1.position - char2.position;
+		dir2.Normalize();
+		char1.position = Vector3.Lerp(char1.position, this.transform.position - dir1 * 0.5f, 0.1f);
+		char2.position = Vector3.Lerp(char2.position, char1.position - dir2 * 0.5f, 0.1f);*/
 	}
 
 	private void UpdateCurrentTile()
@@ -106,14 +120,14 @@ public class PlayerController : MonoBehaviour
 	// move character according to input
 	private void HandleMovement()
 	{
-		Vector3 vMoveAmount = GetMoveAmount();
+		Vector2 vMoveAmount = GetMoveAmount();
 		CheckCollisionX(ref vMoveAmount);
 		CheckCollisionY(ref vMoveAmount);
 		this.transform.Translate (vMoveAmount);
 	}
 
 	// check horizontal collisions and update move amount
-	private void CheckCollisionX(ref Vector3 vMoveAmount)
+	private void CheckCollisionX(ref Vector2 vMoveAmount)
 	{
 		if (vMoveAmount.x != 0)
 		{
@@ -139,7 +153,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	// check vertical collisions and update move amount
-	private void CheckCollisionY(ref Vector3 vMoveAmount)
+	private void CheckCollisionY(ref Vector2 vMoveAmount)
 	{
 		if (vMoveAmount.y != 0)
 		{
@@ -165,9 +179,9 @@ public class PlayerController : MonoBehaviour
 	}
 
 	// return move vector based on keys pressed
-	private Vector3 GetMoveAmount()
+	private Vector2 GetMoveAmount()
 	{
-		Vector3 vDir = Vector3.zero;
+		Vector2 vDir = Vector2.zero;
 		// right
 		if (Input.GetKey(KeyCode.D)) 
 		{				
