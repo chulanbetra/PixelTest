@@ -5,6 +5,7 @@ public class TilesSettings : MonoBehaviour
 {
 	public float TileWidth = 1f;
 	public Color GridColor = Color.white;
+	public MapBounds[] MapBounds;
 
 	public Vector3 IndexToVector3(int i, int j)		
 	{	
@@ -36,6 +37,12 @@ public class TilesSettings : MonoBehaviour
 		{
 			Gizmos.DrawLine(new Vector3(Mathf.Floor(x / this.TileWidth) * this.TileWidth, -10000.0f, 0), 
 			                new Vector3(Mathf.Floor(x / this.TileWidth) * this.TileWidth, 10000.0f, 0));
+		}
+
+		Gizmos.color = Color.yellow;
+		foreach (MapBounds mapbounds in this.MapBounds)
+		{
+			Gizmos.DrawWireCube(mapbounds.Center, mapbounds.Size);
 		}
 	}
 }

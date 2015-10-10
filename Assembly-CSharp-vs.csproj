@@ -48,9 +48,9 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\AI\AIHelper.cs" />
      <Compile Include="Assets\Scripts\AI\AINode.cs" />
-     <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
-     <Compile Include="Assets\Scripts\Camera\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Core\Enums.cs" />
+     <Compile Include="Assets\Scripts\Core\MapBounds.cs" />
+     <Compile Include="Assets\Scripts\Core\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Core\Tile.cs" />
      <Compile Include="Assets\Scripts\Prefabs\Tiles\PathgraphGizmo.cs" />
      <Compile Include="Assets\Scripts\Prefabs\Tiles\TilesSettings.cs" />

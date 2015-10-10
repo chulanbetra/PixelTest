@@ -20,7 +20,6 @@ public class TilesSettingsEditor : Editor
 		// obtain reference to script and object the editor is describing
 		tilesSettings = (TilesSettings)target;
 		tilesGameObject = tilesSettings.gameObject;
-
 		CreateTilesList();
 	}
 
@@ -54,6 +53,8 @@ public class TilesSettingsEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
+		serializedObject.Update();
+
 		// tile width property editor
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Tile Width: ");
@@ -64,6 +65,13 @@ public class TilesSettingsEditor : Editor
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Grid Color: ");
 		tilesSettings.GridColor = EditorGUILayout.ColorField(tilesSettings.GridColor);
+		GUILayout.EndHorizontal();
+
+		// map bounds array
+		GUILayout.BeginHorizontal();
+		SerializedProperty mapBounds = serializedObject.FindProperty("MapBounds");
+		EditorGUILayout.PropertyField(mapBounds, true);
+		serializedObject.ApplyModifiedProperties();
 		GUILayout.EndHorizontal();
 
 		// tiles selection property editor

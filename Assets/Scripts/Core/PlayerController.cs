@@ -14,9 +14,6 @@ public class PlayerController : MonoBehaviour
 	private Vector2 colliderOffset;
 	private Vector2 coliderSize;
 
-	//private Transform char1;
-	//private Transform char2;
-
 	// Use this for initialization
 	void Start() 
 	{	
@@ -45,30 +42,106 @@ public class PlayerController : MonoBehaviour
 			currentNode = aiNodes.FirstOrDefault(node => Mathf.Abs(node.transform.position.x - vPos.x) <= fTileWidthHalf && 
 			                                     Mathf.Abs(node.transform.position.y - vPos.y) <= fTileWidthHalf);
 		}
-
-		//char1 = GameObject.Find("char1").transform;
-		//char2 = GameObject.Find("char2").transform;
 	}
 	
 	// Update is called once per frame
 	void Update() 
 	{	
-		HandleMovement();
-		UpdateCurrentTile();
-
-		// moving other characters behind player like train (Albion style), nned to fix collisions
-		/*Vector3 dir1 = this.transform.position - char1.position;
-		dir1.Normalize();
-		Vector3 dir2 = char1.position - char2.position;
-		dir2.Normalize();
-		char1.position = Vector3.Lerp(char1.position, this.transform.position - dir1 * 0.5f, 0.1f);
-		char2.position = Vector3.Lerp(char2.position, char1.position - dir2 * 0.5f, 0.1f);*/
+		Vector3 vPlayerPosition = this.transform.position;
+		HandleMovement(vPlayerPosition);
+		UpdateCurrentTile(vPlayerPosition);
+		UpdateCameraPosition(vPlayerPosition);
 	}
 
-	private void UpdateCurrentTile()
+	// move character according to input
+	private void HandleMovement(Vector3 vPos)	{
+
+		Vector2 vMoveAmount = GetMoveAmount();
+		CheckCollisionX(vPos, ref vMoveAmount);
+		CheckCollisionY(vPos, ref vMoveAmount);
+		this.transform.Translate(vMoveAmount);
+	}
+
+	// check horizontal collisions and update move amount
+	private void CheckCollisionX(Vector3 vPos, ref Vector2 vMoveAmount)
+	{
+		if (vMoveAmount.x != 0)
+		{
+			float fDir = Mathf.Sign(vMoveAmount.x);
+			Vector2 rayDirection = new Vector2(fDir, 0);
+			for (int i = 0; i < 3; i++)
+			{
+				float fX = vPos.x + colliderOffset.x + coliderSize.x * 0.5f * fDir;
+				float fY = vPos.y + colliderOffset.y + coliderSize.x * 0.5f * (i - 1);
+				Vector2 rayOrigin = new Vector2(fX, fY);
+				Debug.DrawRay(rayOrigin, rayDirection);
+				
+				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.x), CollisionLayerMask);
+				if (hit.collider != null)
+				{
+					Debug.DrawRay(rayOrigin, rayDirection, Color.yellow);
+					vMoveAmount.x = 0;
+					break;
+				}
+			}
+		}
+	}
+
+	// check vertical collisions and update move amount
+	private void CheckCollisionY(Vector3 vPos, ref Vector2 vMoveAmount)
+	{
+		if (vMoveAmount.y != 0)
+		{
+			float fDir = Mathf.Sign(vMoveAmount.y);
+			Vector2 rayDirection = new Vector2(0, fDir);
+			for (int i = 0; i < 3; i++)
+			{
+				float fX = vPos.x + colliderOffset.x + coliderSize.x * 0.5f * (i - 1);
+				float fY = vPos.y + colliderOffset.y + coliderSize.x * 0.5f * fDir;
+				Vector2 rayOrigin = new Vector2(fX, fY);
+				Debug.DrawRay(rayOrigin, rayDirection);
+				
+				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.y), CollisionLayerMask);
+				if (hit.collider != null)
+				{
+					Debug.DrawRay(rayOrigin, rayDirection, Color.yellow);
+					vMoveAmount.y = 0;		
+					break;
+				}
+			}
+		}
+	}
+
+	// return move vector based on keys pressed
+	private Vector2 GetMoveAmount()
+	{
+		Vector2 vDir = Vector2.zero;
+		// right
+		if (Input.GetKey(KeyCode.D)) 
+		{				
+			vDir.x = MoveSpeed * Time.deltaTime;
+		}
+		// left
+		if (Input.GetKey(KeyCode.A))
+		{
+			vDir.x = -MoveSpeed * Time.deltaTime;
+		}
+		// up
+		if (Input.GetKey(KeyCode.W)) 
+		{				
+			vDir.y = MoveSpeed * Time.deltaTime;
+		}
+		// down
+		if (Input.GetKey(KeyCode.S)) 
+		{
+			vDir.y = -MoveSpeed * Time.deltaTime;
+		}
+		return vDir;
+	}
+
+	private void UpdateCurrentTile(Vector3 vPos)
 	{
 		float fTileWidthHalf = tilesSettings.TileWidth * 0.5f;
-		Vector3 vPos = this.transform.position;
 		Vector3 vNodePos = currentNode.transform.position;
 		if (vPos.x > vNodePos.x + fTileWidthHalf)
 		{
@@ -117,91 +190,28 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	// move character according to input
-	private void HandleMovement()
+	private void UpdateCameraPosition(Vector3 vPos)
 	{
-		Vector2 vMoveAmount = GetMoveAmount();
-		CheckCollisionX(ref vMoveAmount);
-		CheckCollisionY(ref vMoveAmount);
-		this.transform.Translate (vMoveAmount);
-	}
+		// find current map bounds
+		MapBounds mapBounds = tilesSettings.MapBounds.FirstOrDefault(bounds => bounds.Contains(vPos));
+		if (mapBounds != null)
+		{
+			// get camera extents
+			float fCameraVerticalExtent = Camera.main.orthographicSize;
+			float fCameraHorizontalExtent = fCameraVerticalExtent * Screen.width / Screen.height;
 
-	// check horizontal collisions and update move amount
-	private void CheckCollisionX(ref Vector2 vMoveAmount)
-	{
-		if (vMoveAmount.x != 0)
-		{
-			Vector3 vPos = this.transform.position;
-			float fDir = Mathf.Sign(vMoveAmount.x);
-			Vector2 rayDirection = new Vector2(fDir, 0);
-			for (int i = 0; i < 3; i++)
-			{
-				float fX = vPos.x + colliderOffset.x + coliderSize.x * 0.5f * fDir;
-				float fY = vPos.y + colliderOffset.y + coliderSize.x * 0.5f * (i - 1);
-				Vector2 rayOrigin = new Vector2(fX, fY);
-				Debug.DrawRay(rayOrigin, rayDirection);
-				
-				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.x), CollisionLayerMask);
-				if (hit.collider != null)
-				{
-					Debug.DrawRay(rayOrigin, rayDirection, Color.yellow);
-					vMoveAmount.x = 0;
-					break;
-				}
-			}
-		}
-	}
+			// get boundary for camera
+			float fLeftBound   = mapBounds.Min.x + fCameraHorizontalExtent;
+			float fRightBound  = mapBounds.Max.x - fCameraHorizontalExtent;
+			float fBottomBound = mapBounds.Min.y + fCameraVerticalExtent;
+			float fTopBound    = mapBounds.Max.y - fCameraVerticalExtent;
 
-	// check vertical collisions and update move amount
-	private void CheckCollisionY(ref Vector2 vMoveAmount)
-	{
-		if (vMoveAmount.y != 0)
-		{
-			Vector3 vPos = this.transform.position;
-			float fDir = Mathf.Sign(vMoveAmount.y);
-			Vector2 rayDirection = new Vector2(0, fDir);
-			for (int i = 0; i < 3; i++)
-			{
-				float fX = vPos.x + colliderOffset.x + coliderSize.x * 0.5f * (i - 1);
-				float fY = vPos.y + colliderOffset.y + coliderSize.x * 0.5f * fDir;
-				Vector2 rayOrigin = new Vector2(fX, fY);
-				Debug.DrawRay(rayOrigin, rayDirection);
-				
-				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, Mathf.Abs(vMoveAmount.y), CollisionLayerMask);
-				if (hit.collider != null)
-				{
-					Debug.DrawRay(rayOrigin, rayDirection, Color.yellow);
-					vMoveAmount.y = 0;		
-					break;
-				}
-			}
-		}
-	}
+			// calculate new camera position
+			float fX = Mathf.Clamp(vPos.x, fLeftBound, fRightBound);
+			float fY = Mathf.Clamp(vPos.y, fBottomBound, fTopBound);
 
-	// return move vector based on keys pressed
-	private Vector2 GetMoveAmount()
-	{
-		Vector2 vDir = Vector2.zero;
-		// right
-		if (Input.GetKey(KeyCode.D)) 
-		{				
-			vDir.x = MoveSpeed * Time.deltaTime;
+			// set new camera position
+			Camera.main.transform.position = new Vector3(fX, fY, Camera.main.transform.position.z);
 		}
-		// left
-		if (Input.GetKey(KeyCode.A))
-		{
-			vDir.x = -MoveSpeed * Time.deltaTime;
-		}
-		// up
-		if (Input.GetKey(KeyCode.W)) 
-		{				
-			vDir.y = MoveSpeed * Time.deltaTime;
-		}
-		// down
-		if (Input.GetKey(KeyCode.S)) 
-		{
-			vDir.y = -MoveSpeed * Time.deltaTime;
-		}
-		return vDir;
 	}
 }
